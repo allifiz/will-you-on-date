@@ -172,6 +172,7 @@
       <input type="hidden" name="Tanggal Date" id="finalDate" />
       <input type="hidden" name="Jam Date" id="finalTime" />
       <input type="hidden" name="Mau Makan" id="finalFood" />
+      <input type="hidden" name="Dari Link" id="fromLink" />
     </form>
 
     <div class="card" id="step1">
@@ -227,6 +228,10 @@
     const noBtn = document.getElementById('noBtn');
     const steps = [1, 2, 3, 4];
     let noButtonIsRunning = false;
+
+    const params = new URLSearchParams(window.location.search);
+const sender = params.get("to") || "unknown";
+document.getElementById("fromLink").value = sender;
 
     function goToStep(step) {
       steps.forEach(num => document.getElementById(`step${num}`).classList.add('hidden'));
