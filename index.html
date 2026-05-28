@@ -161,6 +161,68 @@
       from { transform: translateY(100dvh) rotate(0deg); }
       to { transform: translateY(-15dvh) rotate(360deg); }
     }
+
+    .popup-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 182, 213, 0.45);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      padding: 18px;
+    }
+
+    .popup-overlay.show {
+      display: flex;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .popup-box {
+      width: 100%;
+      max-width: 340px;
+      background: white;
+      border-radius: 28px;
+      padding: 28px 22px;
+      text-align: center;
+      box-shadow: 0 25px 60px rgba(255, 79, 154, 0.32);
+      animation: popIn 0.35s ease;
+    }
+
+    .popup-box h2 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      color: #4a1f35;
+    }
+
+    .popup-box p {
+      margin-bottom: 18px;
+      color: #4a1f35;
+    }
+
+    .popup-emoji {
+      font-size: 54px;
+      margin-bottom: 10px;
+      animation: pulse 1.3s infinite;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0.85) translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -220,6 +282,15 @@
       <h1>Aaaaa seneng banget!</h1>
       <p id="summaryText"></p>
       <p class="small">Jawaban kamu lagi dikirim ke email aku yaa 💌</p>
+    </div>
+
+    <div class="popup-overlay" id="successPopup">
+      <div class="popup-box">
+        <div class="popup-emoji">💌✨</div>
+        <h2>Yeay, udah kekirim!</h2>
+        <p>Jawaban kamu udah masuk. Sekarang aku tinggal senyum-senyum sendiri nunggu hari date kita 🥺💕</p>
+        <button type="button" class="yes" onclick="closePopup()">Okeee 💖</button>
+      </div>
     </div>
   </div>
 
@@ -303,8 +374,36 @@ document.getElementById("fromLink").value = sender;
       goToStep(4);
 
       setTimeout(() => {
-        document.getElementById('dateForm').submit();
-      }, 1800);
+        sendToEmail();
+      }, 800);
+    }
+
+    async function sendToEmail() {
+      const form = document.getElementById('dateForm');
+      const formData = new FormData(form);
+
+      try {
+        await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'Accept': 'application/json'
+          }
+        });
+
+        document.querySelector('.small').innerText = 'Jawaban kamu sudah terkirim 💌';
+        showSuccessPopup();
+      } catch (error) {
+        document.querySelector('.small').innerText = 'Jawabannya tersimpan, tapi email gagal terkirim 😭';
+      }
+    }
+
+    function showSuccessPopup() {
+      document.getElementById('successPopup').classList.add('show');
+    }
+
+    function closePopup() {
+      document.getElementById('successPopup').classList.remove('show');
     }
 
     function createHearts() {
