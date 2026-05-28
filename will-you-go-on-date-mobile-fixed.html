@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Will You Go On Date?</title>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      background: linear-gradient(135deg, #ffd6e8, #ffeef6, #fff6fb);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4a1f35;
+      padding: 18px;
+    }
+
+    .phone-wrap {
+      width: 100%;
+      max-width: 430px;
+      height: 100dvh;
+      max-height: 920px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .card {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(10px);
+      border-radius: 28px;
+      padding: 30px 22px;
+      box-shadow: 0 25px 60px rgba(255, 92, 153, 0.22);
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 { font-size: 28px; margin: 0 0 10px; }
+    p { font-size: 15px; line-height: 1.6; margin: 8px 0 22px; }
+
+    .emoji {
+      font-size: 56px;
+      margin-bottom: 12px;
+      animation: pulse 1.4s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 25px;
+      min-height: 64px;
+      position: relative;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 25px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .yes {
+      background: #ff4f9a;
+      color: white;
+      box-shadow: 0 10px 24px rgba(255, 79, 154, 0.35);
+    }
+
+    .no {
+      background: white;
+      color: #ff4f9a;
+      border: 2px solid #ff9bc6;
+      z-index: 99;
+      transition: left 0.18s ease, top 0.18s ease;
+    }
+
+    .no.run {
+      position: absolute;
+    }
+
+    .hidden { display: none; }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1.5px solid #ffc1dc;
+      outline: none;
+      margin-bottom: 14px;
+      font-size: 16px;
+      background: white;
+      color: #4a1f35;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      font-weight: 700;
+      margin-bottom: 7px;
+      font-size: 14px;
+    }
+
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .food {
+      border-radius: 18px;
+      padding: 16px 8px;
+      background: #fff;
+      border: 2px solid #ffd1e5;
+      cursor: pointer;
+      font-weight: 700;
+      transition: 0.2s;
+      font-size: 14px;
+    }
+
+    .food:active {
+      transform: scale(0.96);
+      border-color: #ff4f9a;
+      background: #fff0f7;
+    }
+
+    .small { font-size: 13px; opacity: .75; }
+
+    .heart {
+      position: absolute;
+      font-size: 22px;
+      animation: floatUp 5s linear infinite;
+      opacity: .65;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(100dvh) rotate(0deg); }
+      to { transform: translateY(-15dvh) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-wrap" id="phoneWrap">
+    <form id="dateForm" action="https://formsubmit.co/sadflix07@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="Dia mau date sama kamu 💖" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="Tanggal Date" id="finalDate" />
+      <input type="hidden" name="Jam Date" id="finalTime" />
+      <input type="hidden" name="Mau Makan" id="finalFood" />
+    </form>
+
+    <div class="card" id="step1">
+      <div class="emoji">🥺💗</div>
+      <h1>Will you go on date with me?</h1>
+      <p>Aku punya pertanyaan kecil, tapi jawabannya penting banget buat aku.</p>
+
+      <div class="buttons" id="buttonArea">
+        <button type="button" class="yes" onclick="goToStep(2)">Yes 💖</button>
+        <button type="button" class="no" id="noBtn">No 😭</button>
+      </div>
+    </div>
+
+    <div class="card hidden" id="step2">
+      <div class="emoji">📅✨</div>
+      <h1>Yeay! Kapan kita date?</h1>
+      <p>Pilih tanggal dan jam yang kamu mau ya.</p>
+
+      <label for="dateInput">Tanggal</label>
+      <input type="date" id="dateInput" required />
+
+      <label for="timeInput">Jam</label>
+      <input type="time" id="timeInput" required />
+
+      <button type="button" class="yes" onclick="saveDateTime()">Save 💌</button>
+    </div>
+
+    <div class="card hidden" id="step3">
+      <div class="emoji">🍽️💕</div>
+      <h1>Mau makan apa?</h1>
+      <p>Pilih makanan yang paling kamu pengen buat date nanti.</p>
+
+      <div class="food-grid">
+        <div class="food" onclick="chooseFood('Sushi 🍣')">Sushi 🍣</div>
+        <div class="food" onclick="chooseFood('Pizza 🍕')">Pizza 🍕</div>
+        <div class="food" onclick="chooseFood('Ramen 🍜')">Ramen 🍜</div>
+        <div class="food" onclick="chooseFood('Steak 🥩')">Steak 🥩</div>
+        <div class="food" onclick="chooseFood('Bakso 🍲')">Bakso 🍲</div>
+        <div class="food" onclick="chooseFood('Terserah kamu 😆')">Terserah kamu 😆</div>
+      </div>
+    </div>
+
+    <div class="card hidden" id="step4">
+      <div class="emoji">😭💖</div>
+      <h1>Aaaaa seneng banget!</h1>
+      <p id="summaryText"></p>
+      <p class="small">Jawaban kamu lagi dikirim ke email aku yaa 💌</p>
+    </div>
+  </div>
+
+  <script>
+    const phoneWrap = document.getElementById('phoneWrap');
+    const noBtn = document.getElementById('noBtn');
+    const steps = [1, 2, 3, 4];
+    let noButtonIsRunning = false;
+
+    function goToStep(step) {
+      steps.forEach(num => document.getElementById(`step${num}`).classList.add('hidden'));
+      document.getElementById(`step${step}`).classList.remove('hidden');
+
+      if (step !== 1) noBtn.style.display = 'none';
+    }
+
+    function moveNoButton() {
+      const wrapRect = phoneWrap.getBoundingClientRect();
+      const btnW = noBtn.offsetWidth;
+      const btnH = noBtn.offsetHeight;
+      const padding = 16;
+
+      if (!noButtonIsRunning) {
+        const btnRect = noBtn.getBoundingClientRect();
+        noBtn.classList.add('run');
+        phoneWrap.appendChild(noBtn);
+        noBtn.style.left = (btnRect.left - wrapRect.left) + 'px';
+        noBtn.style.top = (btnRect.top - wrapRect.top) + 'px';
+        noButtonIsRunning = true;
+      }
+
+      const minX = padding;
+      const minY = padding;
+      const maxX = phoneWrap.clientWidth - btnW - padding;
+      const maxY = phoneWrap.clientHeight - btnH - padding;
+
+      const x = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
+      const y = Math.floor(Math.random() * (maxY - minY + 1)) + minY;
+
+      noBtn.style.left = x + 'px';
+      noBtn.style.top = y + 'px';
+    }
+
+    noBtn.addEventListener('pointerenter', moveNoButton);
+    noBtn.addEventListener('pointerdown', function(e) {
+      e.preventDefault();
+      moveNoButton();
+    });
+
+    noBtn.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      moveNoButton();
+    }, { passive: false });
+
+    function saveDateTime() {
+      const date = document.getElementById('dateInput').value;
+      const time = document.getElementById('timeInput').value;
+
+      if (!date || !time) {
+        alert('Tanggal sama jamnya isi dulu yaa 😭');
+        return;
+      }
+
+      document.getElementById('finalDate').value = date;
+      document.getElementById('finalTime').value = time;
+      goToStep(3);
+    }
+
+    function chooseFood(food) {
+      const date = document.getElementById('finalDate').value;
+      const time = document.getElementById('finalTime').value;
+
+      document.getElementById('finalFood').value = food;
+      document.getElementById('summaryText').innerHTML =
+        `Kita date tanggal <b>${date}</b> jam <b>${time}</b>, terus makan <b>${food}</b>. Aku beneran seneng banget, makasih udah pilih yes 🥺💕`;
+
+      goToStep(4);
+
+      setTimeout(() => {
+        document.getElementById('dateForm').submit();
+      }, 1800);
+    }
+
+    function createHearts() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerText = ['💗', '💕', '💖', '💘'][Math.floor(Math.random() * 4)];
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+      phoneWrap.appendChild(heart);
+      setTimeout(() => heart.remove(), 7000);
+    }
+
+    setInterval(createHearts, 700);
+  </script>
+</body>
+</html>
